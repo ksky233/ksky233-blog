@@ -1,0 +1,26 @@
+---
+import ArticleCard from '../../components/ArticleCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getSeriesMap, getVisiblePosts } from '../../lib/posts';
+
+const seriesMap = getSeriesMap(await getVisiblePosts());
+---
+
+<BaseLayout title="文章系列 · ksky233 / Blog" description="按主题与技术演进组织的文章系列。">
+	<header class="page-intro">
+		<h1>文章系列</h1>
+		<p>发布日期记录公开时间，系列顺序记录技术脉络。</p>
+	</header>
+	{seriesMap.size > 0 ? (
+		<div class="post-list">
+			{[...seriesMap.entries()].map(([name, posts]) => (
+				<section>
+					<div class="section-heading"><h2>{name}</h2><span>{posts.length} 篇</span></div>
+					<div class="post-list">{posts.map((post) => <ArticleCard post={post} />)}</div>
+				</section>
+			))}
+		</div>
+	) : (
+		<div class="empty-state">系列将在文章发布后出现。</div>
+	)}
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import { GITHUB_URL, HOME_URL } from '../consts';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+	<div class="site-footer__links">
+		<a href="/about">关于</a>
+		<a href="/articles">全部文章</a>
+		<a href="/rss.xml">RSS 订阅</a>
+		<a href={HOME_URL}>个人主页</a>
+		<a href={GITHUB_URL} rel="noreferrer" target="_blank">GitHub</a>
+	</div>
+	<p>© {year} ksky233 · 用 Markdown 记录仍在发展的 Agent</p>
+</footer>

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>流年 · 博客</title>
+    <!-- 字体：优雅衬线 + 现代无衬线 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet" />
+    <!-- Font Awesome 6 (免费图标库) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ===== 全局重置 & 变量 ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-body: #f6f4f0;
+            --bg-card: rgba(255, 255, 255, 0.72);
+            --bg-card-hover: rgba(255, 255, 255, 0.90);
+            --text-primary: #1e1e2a;
+            --text-secondary: #4a4a5a;
+            --text-muted: #7a7a8a;
+            --accent-1: #c47b6b;
+            --accent-2: #d4a08a;
+            --accent-gradient: linear-gradient(135deg, #c47b6b 0%, #e8b4a0 100%);
+            --border-light: rgba(0, 0, 0, 0.06);
+            --shadow-soft: 0 12px 40px -12px rgba(0, 0, 0, 0.10);
+            --shadow-hover: 0 24px 60px -16px rgba(0, 0, 0, 0.18);
+            --radius-lg: 28px;
+            --radius-md: 18px;
+            --radius-sm: 10px;
+            --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --font-serif: 'Playfair Display', Georgia, serif;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* 暗色模式 — 特色之一 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-body: #12121a;
+                --bg-card: rgba(30, 30, 44, 0.78);
+                --bg-card-hover: rgba(40, 40, 58, 0.92);
+                --text-primary: #eeeef2;
+                --text-secondary: #b8b8cc;
+                --text-muted: #787892;
+                --border-light: rgba(255, 255, 255, 0.06);
+                --shadow-soft: 0 12px 40px -12px rgba(0, 0, 0, 0.50);
+                --shadow-hover: 0 24px 60px -16px rgba(0, 0, 0, 0.70);
+                --accent-1: #d68f7a;
+                --accent-2: #e8b4a0;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.7;
+            padding: 2rem 1.5rem;
+            transition: background 0.3s, color 0.3s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ===== 容器 ===== */
+        .container {
+            max-width: 1120px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ===== 头部 / 导航 ===== */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem 2rem;
+            padding: 0.5rem 0 2.5rem 0;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.9rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .logo i {
+            -webkit-text-fill-color: var(--accent-1);
+            font-size: 1.6rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-gradient);
+            transition: width 0.3s;
+        }
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* ===== Hero 区 ===== */
+        .hero {
+            padding: 2rem 0 3.5rem 0;
+            text-align: center;
+        }
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(2.6rem, 7vw, 4.2rem);
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 0.8rem;
+        }
+        .hero h1 span {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 540px;
+            margin: 0 auto 1.2rem;
+        }
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .hero-meta i {
+            margin-right: 0.4rem;
+            color: var(--accent-1);
+        }
+
+        /* ===== 布局：主内容 + 侧边栏 ===== */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem 2.5rem;
+            margin-top: 1rem;
+        }
+
+        /* ===== 文章卡片 ===== */
+        .post-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: var(--radius-lg);
+            padding: 2rem 2.2rem;
+            margin-bottom: 2.2rem;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-light);
+            transition: all var(--transition);
+            cursor: default;
+        }
+        .post-card:hover {
+            background: var(--bg-card-hover);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-4px);
+        }
+
+        .post-category {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--accent-1);
+            background: rgba(196, 123, 107, 0.12);
+            padding: 0.2rem 1rem;
+            border-radius: 100px;
+            margin-bottom: 0.8rem;
+        }
+
+        .post-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            font-weight: 600;
+            line-height: 1.25;
+            margin-bottom: 0.6rem;
+            color: var(--text-primary);
+        }
+        .post-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .post-title a:hover {
+            color: var(--accent-1);
+        }
+
+        .post-excerpt {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .post-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1.2rem 2rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-light);
+            padding-top: 1.2rem;
+            margin-top: 0.4rem;
+        }
+        .post-meta .author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        .post-meta .author img {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--accent-2);
+        }
+        .post-meta .date i,
+        .post-meta .read-time i {
+            margin-right: 0.3rem;
+        }
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.6rem;
+            margin-left: auto;
+        }
+        .post-tags .tag {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            background: var(--bg-body);
+            padding: 0.15rem 0.8rem;
+            border-radius: 100px;
+            border: 1px solid var(--border-light);
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+        .post-tags .tag:hover {
+            color: var(--accent-1);
+            border-color: var(--accent-1);
+            background: rgba(196, 123, 107, 0.06);
+        }
+
+        /* ===== 侧边栏 ===== */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2.2rem;
+        }
+
+        .sidebar-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: var(--radius-md);
+            padding: 1.8rem 1.8rem 2rem;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-soft);
+            transition: background 0.3s;
+        }
+        .sidebar-card h3 {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .sidebar-card h3 i {
+            color: var(--accent-1);
+            font-size: 1.1rem;
+        }
+
+        /* 关于我 */
+        .about-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--accent-gradient);
+            margin-bottom: 0.8rem;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        .about-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .about-bio {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            margin: 0.4rem 0 0.8rem;
+        }
+        .social-links {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 0.4rem;
+        }
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .social-links a:hover {
+            color: var(--accent-1);
+            transform: scale(1.1);
+        }
+
+        /* 热门文章 */
+        .popular-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+        .popular-list li {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 0.9rem;
+        }
+        .popular-list li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .popular-list .num {
+            font-weight: 600;
+            color: var(--accent-1);
+            font-size: 1.1rem;
+            width: 1.6rem;
+            text-align: right;
+            opacity: 0.6;
+        }
+        .popular-list a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+            font-weight: 500;
+        }
+        .popular-list a:hover {
+            color: var(--accent-1);
+        }
+
+        /* 标签云 */
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 0.6rem;
+        }
+        .tag-cloud .tag {
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: var(--bg-body);
+            padding: 0.3rem 1rem;
+            border-radius: 100px;
+            border: 1px solid var(--border-light);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .tag-cloud .tag:hover {
+            color: var(--accent-1);
+            border-color: var(--accent-1);
+            background: rgba(196, 123, 107, 0.06);
+            transform: translateY(-2px);
+        }
+
+        /* ===== 分页 ===== */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.6rem;
+            margin: 3rem 0 2rem;
+            flex-wrap: wrap;
+        }
+        .pagination a,
+        .pagination span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            height: 40px;
+            padding: 0 0.8rem;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            transition: all 0.25s;
+        }
+        .pagination a:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            border-color: var(--accent-1);
+        }
+        .pagination .active {
+            background: var(--accent-gradient);
+            color: #fff;
+            border-color: transparent;
+            pointer-events: none;
+        }
+
+        /* ===== 页脚 ===== */
+        .site-footer {
+            margin-top: 4rem;
+            padding: 2.5rem 0 1rem;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .site-footer .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.8rem;
+            flex-wrap: wrap;
+        }
+        .site-footer .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .site-footer .footer-links a:hover {
+            color: var(--accent-1);
+        }
+        .site-footer .heart {
+            color: var(--accent-1);
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 900px) {
+            .blog-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .sidebar {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 1rem 0.8rem;
+            }
+            .site-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.8rem;
+            }
+            .nav-links {
+                gap: 1.2rem;
+                font-size: 0.9rem;
+                flex-wrap: wrap;
+            }
+            .post-card {
+                padding: 1.5rem 1.2rem;
+            }
+            .post-title {
+                font-size: 1.4rem;
+            }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .post-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.6rem;
+            }
+            .post-tags {
+                margin-left: 0;
+            }
+            .sidebar {
+                grid-template-columns: 1fr;
+            }
+            .pagination a,
+            .pagination span {
+                min-width: 34px;
+                height: 34px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* ===== 工具类 ===== */
+        .text-gradient {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ===== 特色：滚动条美化 ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-body);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-1);
+        }
+
+        /* ===== 特色：选中文字 ===== */
+        ::selection {
+            background: rgba(196, 123, 107, 0.25);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ===== 头部 ===== -->
+        <header class="site-header">
+            <a href="#" class="logo">
+                <i class="fas fa-feather-alt"></i> 流年
+            </a>
+            <ul class="nav-links">
+                <li><a href="#">首页</a></li>
+                <li><a href="#">文章</a></li>
+                <li><a href="#">关于</a></li>
+                <li><a href="#">搜索 <i class="fas fa-search" style="font-size:0.8rem;"></i></a></li>
+            </ul>
+        </header>
+
+        <!-- ===== Hero ===== -->
+        <section class="hero">
+            <h1>笔下 <span>有光</span>，<br />岁月 <span>留痕</span></h1>
+            <p>记录思考、阅读与生活。在喧嚣中，留一片安静的栖息地。</p>
+            <div class="hero-meta">
+                <span><i class="far fa-calendar-alt"></i> 2026 · 秋</span>
+                <span><i class="far fa-file-alt"></i> 37 篇原创</span>
+                <span><i class="far fa-comment"></i> 142 条留言</span>
+            </div>
+        </section>
+
+        <!-- ===== 主网格 ===== -->
+        <div class="blog-grid">
+
+            <!-- ===== 主内容 ===== -->
+            <main>
+
+                <!-- 文章 1 -->
+                <article class="post-card">
+                    <div class="post-category">随笔</div>
+                    <h2 class="post-title">
+                        <a href="#">在速朽的时代，如何培养「深阅读」的能力</a>
+                    </h2>
+                    <p class="post-excerpt">
+                        信息如洪流，我们被推送、被算法投喂，注意力成为最稀缺的资源。但总有一些书、一些文字，值得我们慢下来，用整块的时间去咀嚼、去对话……
+                    </p>
+                    <div class="post-meta">
+                        <span class="author">
+                            <img src="https://i.pravatar.cc/60?img=11" alt="avatar" />
+                            林疏影
+                        </span>
+                        <span class="date"><i class="far fa-calendar-alt"></i> 2026-09-06</span>
+                        <span class="read-time"><i class="far fa-clock"></i> 6 分钟</span>
+                        <span class="post-tags">
+                            <a href="#" class="tag">#阅读</a>
+                            <a href="#" class="tag">#深度思考</a>
+                            <a href="#" class="tag">#生活</a>
+                        </span>
+                    </div>
+                </article>
+
+                <!-- 文章 2 -->
+                <article class="post-card">
+                    <div class="post-category">摄影日记</div>
+                    <h2 class="post-title">
+                        <a href="#">秋日漫步：镜头下的色彩与情绪</a>
+                    </h2>
+                    <p class="post-excerpt">
+                        北方的秋天总是短暂而浓烈。银杏黄、枫叶红，光影在午后三点变得温柔。我带着相机走过三条街，拍下了这些瞬间——它们不值得被记住，但值得被看见。
+                    </p>
+                    <div class="post-meta">
+                        <span class="author">
+                            <img src="https://i.pravatar.cc/60?img=33" alt="avatar" />
+                            陈知白
+                        </span>
+                        <span class="date"><i class="far fa-calendar-alt"></i> 2026-09-03</span>
+                        <span class="read-time"><i class="far fa-clock"></i> 4 分钟</span>
+                        <span class="post-tags">
+                            <a href="#" class="tag">#摄影</a>
+                            <a href="#" class="tag">#秋天</a>
+                            <a href="#" class="tag">#城市漫游</a>
+                        </span>
+                    </div>
+                </article>
+
+                <!-- 文章 3 -->
+                <article class="post-card">
+                    <div class="post-category">书评</div>
+                    <h2 class="post-title">
+                        <a href="#">重读《局外人》—— 默尔索的真诚与冷漠</a>
+                    </h2>
+                    <p class="post-excerpt">
+                        加缪笔下的人物总是游离于社会规则之外。默尔索不是没有感情，他只是拒绝表演。在荒诞的世界里，真诚本身就是一种反抗。十年后再读，有了不一样的体会。
+                    </p>
+                    <div class="post-meta">
+                        <span class="author">
+                            <img src="https://i.pravatar.cc/60?img=45" alt="avatar" />
+                            苏远
+                        </span>
+                        <span class="date"><i class="far fa-calendar-alt"></i> 2026-08-28</span>
+                        <span class="read-time"><i class="far fa-clock"></i> 8 分钟</span>
+                        <span class="post-tags">
+                            <a href="#" class="tag">#加缪</a>
+                            <a href="#" class="tag">#存在主义</a>
+                            <a href="#" class="tag">#重读经典</a>
+                        </span>
+                    </div>
+                </article>
+
+                <!-- ===== 分页 ===== -->
+                <nav class="pagination">
+                    <a href="#"><i class="fas fa-chevron-left"></i></a>
+                    <span class="active">1</span>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#"><i class="fas fa-chevron-right"></i></a>
+                </nav>
+
+            </main>
+
+            <!-- ===== 侧边栏 ===== -->
+            <aside class="sidebar">
+
+                <!-- 关于我 -->
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-user-astronaut"></i> 关于我</h3>
+                    <img class="about-avatar" src="https://i.pravatar.cc/200?img=60" alt="avatar" />
+                    <div class="about-name">沈 念</div>
+                    <p class="about-bio">
+                        独立开发者 · 业余写作者。相信文字的温度，也相信代码的逻辑。在数字与诗意之间游走。
+                    </p>
+                    <div class="social-links">
+                        <a href="#" aria-label="微博"><i class="fab fa-weibo"></i></a>
+                        <a href="#" aria-label="知乎"><i class="fab fa-zhihu"></i></a>
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="RSS"><i class="fas fa-rss"></i></a>
+                    </div>
+                </div>
+
+                <!-- 热门文章 -->
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-fire"></i> 热门文章</h3>
+                    <ul class="popular-list">
+                        <li>
+                            <span class="num">01</span>
+                            <a href="#">那些被算法遗忘的好书</a>
+                        </li>
+                        <li>
+                            <span class="num">02</span>
+                            <a href="#">从零搭建个人博客：技术选型与设计</a>
+                        </li>
+                        <li>
+                            <span class="num">03</span>
+                            <a href="#">在不确定的时代，如何安顿内心</a>
+                        </li>
+                        <li>
+                            <span class="num">04</span>
+                            <a href="#">京都的秋：寺院、苔藓与枯山水</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 标签云 -->
+                <div class="sidebar-card">
+                    <h3><i class="fas fa-tags"></i> 标签云</h3>
+                    <div class="tag-cloud">
+                        <a href="#" class="tag">阅读</a>
+                        <a href="#" class="tag">写作</a>
+                        <a href="#" class="tag">摄影</a>
+                        <a href="#" class="tag">旅行</a>
+                        <a href="#" class="tag">哲学</a>
+                        <a href="#" class="tag">生活</a>
+                        <a href="#" class="tag">诗歌</a>
+                        <a href="#" class="tag">设计</a>
+                        <a href="#" class="tag">代码</a>
+                        <a href="#" class="tag">AI</a>
+                        <a href="#" class="tag">音乐</a>
+                        <a href="#" class="tag">电影</a>
+                    </div>
+                </div>
+
+            </aside>
+        </div>
+
+        <!-- ===== 页脚 ===== -->
+        <footer class="site-footer">
+            <div class="footer-links">
+                <a href="#">关于</a>
+                <a href="#">隐私政策</a>
+                <a href="#">RSS 订阅</a>
+                <a href="#">友情链接</a>
+            </div>
+            <p>
+                &copy; 2026 流年 · 用 <span class="heart">♥</span> 和 Markdown 书写
+                <br style="display: none;" />
+                <span style="font-size:0.8rem; opacity:0.7;">—— 在喧嚣中，留一片安静 ——</span>
+            </p>
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+</body>
+</html>

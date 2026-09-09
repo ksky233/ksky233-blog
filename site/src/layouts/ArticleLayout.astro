@@ -1,0 +1,83 @@
+---
+import type { ImageMetadata } from 'astro';
+import BaseLayout from './BaseLayout.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	pubDate: Date;
+	originalDate?: Date;
+	updatedDate?: Date;
+	reviewedDate?: Date;
+	contentStatus: 'current' | 'historical' | 'outdated';
+	notice?: string;
+	series?: string;
+	seriesOrder?: number;
+	category: string;
+	tags: string[];
+	draft: boolean;
+	heroImage?: ImageMetadata | string;
+}
+
+const {
+	title,
+	description,
+	pubDate,
+	originalDate,
+	updatedDate,
+	reviewedDate,
+	contentStatus,
+	notice,
+	series,
+	seriesOrder,
+	category,
+	tags,
+	draft,
+	heroImage,
+} = Astro.props;
+
+const heroSrc = typeof heroImage === 'string' ? heroImage : heroImage?.src;
+const statusLabel = contentStatus === 'historical' ? '历史技术记录' : '内容可能已过时';
+---
+
+<BaseLayout title={`${title} · ksky233 / Blog`} description={description} image={heroImage} mainClass="page-main">
+	<article class="article-shell">
+		<header class="article-header">
+			<div>
+				<span class="post-card__category">{category}</span>
+				{draft && <span class="status-chip" style="margin-left:.45rem">草稿预览</span>}
+			</div>
+			<h1>{title}</h1>
+			<p class="article-header__description">{description}</p>
+			<div class="article-meta">
+				<span>发布于 <FormattedDate date={pubDate} /></span>
+				{originalDate && <span>原始笔记 <FormattedDate date={originalDate} /></span>}
+				{updatedDate && <span>更新于 <FormattedDate date={updatedDate} /></span>}
+				{reviewedDate && <span>技术复核 <FormattedDate date={reviewedDate} /></span>}
+				{series && <span>{series}{seriesOrder ? ` · ${seriesOrder}` : ''}</span>}
+			</div>
+		</header>
+
+		{heroSrc && <img class="hero-image" src={heroSrc} alt={title} />}
+
+		{contentStatus !== 'current' && (
+			<div class="notice">
+				<strong>{statusLabel}：</strong>
+				{notice ?? '本文保留原始技术语境，具体 API 与实现状态请以最新官方资料为准。'}
+			</div>
+		)}
+
+		{contentStatus === 'current' && notice && <div class="notice">{notice}</div>}
+
+		<div class="prose">
+			<slot />
+		</div>
+
+		<footer class="article-footer">
+			<div class="tag-list" aria-label="文章标签">
+				{tags.map((tag) => <span class="tag">#{tag}</span>)}
+			</div>
+		</footer>
+	</article>
+</BaseLayout>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f6f4f0"/>
+  <circle cx="1060" cy="70" r="220" fill="#eadbd5" opacity=".72"/>
+  <circle cx="95" cy="590" r="175" fill="#ebe7e1"/>
+  <text x="96" y="115" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="600" letter-spacing="5" fill="#c47b6b">KSKY233 / BLOG</text>
+  <text x="96" y="330" font-family="Noto Serif SC, Songti SC, serif" font-size="92" font-weight="600" fill="#1e1e2a">Agent还在发展</text>
+  <text x="100" y="410" font-family="Inter, Arial, sans-serif" font-size="28" fill="#4a4a5a">Agent Engineering · Runtime · Practice</text>
+</svg>

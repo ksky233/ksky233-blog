@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="关于 · ksky233 / Blog" description="关于这个博客与 ksky233 的项目。">
+	<header class="page-intro">
+		<h1>关于</h1>
+	</header>
+
+	<div class="about-sections">
+		<section class="quiet-card about-card">
+			<p>这里是 ksky233 的技术写作与项目记录空间。</p>
+			<p>内容跟随正在学习、思考和构建的东西变化，不预设唯一主题。目前会较多涉及 AI 与 Agent 工程、Python 后端、知识检索、工具协议、软件架构和独立项目实践。</p>
+			<p>文章既包括当前观察，也保留经过重新复核的早期技术记录。历史内容会明确标注原始日期和最近复核日期。</p>
+		</section>
+
+		<section aria-labelledby="projects-heading">
+			<div class="section-heading">
+				<h2 id="projects-heading">项目</h2>
+				<a href="https://dearloom.me">个人主页 →</a>
+			</div>
+
+			<div class="project-list">
+				<article class="project-card">
+					<div class="project-card__index">01 / DOCUMENT RAG</div>
+					<h2>DualStruct</h2>
+					<p class="project-card__subtitle">Structure-aware multimodal document RAG</p>
+					<p class="project-card__description">将复杂 PDF 转换为可检索、可融合、可回溯的证据链，贯通结构感知切块、Text/Visual Retrieval 与 Citation。</p>
+					<div class="project-card__links">
+						<a href="https://dualstruct.dearloom.me">项目主页 →</a>
+						<a href="https://github.com/ksky233/DualStruct" rel="noreferrer" target="_blank">GitHub ↗</a>
+					</div>
+				</article>
+
+				<article class="project-card">
+					<div class="project-card__index">02 / MCP GATEWAY</div>
+					<h2>NexusMCP</h2>
+					<p class="project-card__subtitle">Enterprise MCP Gateway · Tool Registry · Toolset Control Plane</p>
+					<p class="project-card__description">将企业 HTTP/OpenAPI 服务发布为受治理的 MCP Tool，并以 Toolset、Policy、Credential、Retry 与 Audit 管理 Agent 可见能力。</p>
+					<div class="project-card__links">
+						<a href="https://nexusmcp.dearloom.me">项目主页 →</a>
+						<a href="https://github.com/ksky233/NexusMCP" rel="noreferrer" target="_blank">GitHub ↗</a>
+					</div>
+				</article>
+			</div>
+		</section>
+	</div>
+</BaseLayout>

@@ -1,0 +1,58 @@
+---
+import ArticleCard from '../components/ArticleCard.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getSeriesMap, getVisiblePosts } from '../lib/posts';
+
+const posts = await getVisiblePosts();
+const featuredPosts = posts.filter((post) => post.data.featured);
+const homePosts = featuredPosts.length > 0 ? featuredPosts.slice(0, 3) : posts.slice(0, 3);
+const seriesMap = getSeriesMap(posts);
+const tagCounts = new Map<string, number>();
+for (const post of posts) {
+	for (const tag of post.data.tags) tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+}
+const topTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
+---
+
+<BaseLayout>
+	<section class="hero" aria-labelledby="hero-title">
+		<h1 id="hero-title">Agent<span>还在发展</span></h1>
+	</section>
+
+	<div class="content-grid">
+		<section aria-labelledby="featured-heading">
+			<div class="section-heading">
+				<h2 id="featured-heading">精选文章</h2>
+				<a href="/articles">查看全部 →</a>
+			</div>
+			{homePosts.length > 0 ? (
+				<div class="post-list">{homePosts.map((post) => <ArticleCard post={post} />)}</div>
+			) : (
+				<div class="empty-state">第一篇文章正在整理中。</div>
+			)}
+		</section>
+
+		<aside class="sidebar" aria-label="博客信息">
+			<section class="sidebar-card">
+				<h2>关于本站</h2>
+				<p>记录正在学习、思考和构建的技术问题，以及持续推进的项目实践。</p>
+			</section>
+			<section class="sidebar-card">
+				<h2>系列</h2>
+				{seriesMap.size > 0 ? (
+					<ul class="sidebar-links">
+						{[...seriesMap.entries()].map(([name, entries]) => (
+							<li><a href="/series"><strong>{name}</strong><span>{entries.length} 篇</span></a></li>
+						))}
+					</ul>
+				) : <p>系列将在文章发布后出现。</p>}
+			</section>
+			<section class="sidebar-card">
+				<h2>标签</h2>
+				<div class="tag-list" style="margin-left:0">
+					{topTags.map(([tag]) => <span class="tag">{tag}</span>)}
+				</div>
+			</section>
+		</aside>
+	</div>
+</BaseLayout>

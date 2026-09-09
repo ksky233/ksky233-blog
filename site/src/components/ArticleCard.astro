@@ -1,0 +1,25 @@
+---
+import type { BlogPost } from '../lib/posts';
+import { getPostUrl } from '../lib/posts';
+import FormattedDate from './FormattedDate.astro';
+
+interface Props {
+	post: BlogPost;
+}
+
+const { post } = Astro.props;
+---
+
+<article class="post-card">
+	<div class="post-card__category">{post.data.category}</div>
+	{post.data.draft && <span class="status-chip" style="margin-left:.45rem">草稿预览</span>}
+	<h2><a href={getPostUrl(post)}>{post.data.title}</a></h2>
+	<p class="post-card__excerpt">{post.data.description}</p>
+	<div class="post-card__meta">
+		<span>发布于 <FormattedDate date={post.data.pubDate} /></span>
+		{post.data.series && <span>{post.data.series}</span>}
+		<div class="tag-list" aria-label="文章标签">
+			{post.data.tags.slice(0, 4).map((tag) => <span class="tag">#{tag}</span>)}
+		</div>
+	</div>
+</article>

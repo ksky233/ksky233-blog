@@ -1,0 +1,19 @@
+---
+import ArticleCard from '../../components/ArticleCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getVisiblePosts } from '../../lib/posts';
+
+const posts = await getVisiblePosts();
+---
+
+<BaseLayout title="全部文章 · ksky233 / Blog" description="ksky233 的 Agent 工程文章。">
+	<header class="page-intro">
+		<h1>全部文章</h1>
+		<p>按公开时间排列；系列内部的技术演进顺序由独立序号维护。</p>
+	</header>
+	{posts.length > 0 ? (
+		<div class="post-list">{posts.map((post) => <ArticleCard post={post} />)}</div>
+	) : (
+		<div class="empty-state">还没有公开文章。</div>
+	)}
+</BaseLayout>
