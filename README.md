@@ -11,6 +11,7 @@
 1. [都是飞书里的 Agent：自建 Agent 应用，还是复用通用 Runtime？](https://blog.dearloom.me/posts/agent-application-vs-runtime/)
 2. [一个飞书 Agent Service，到底有多少代码不属于业务？](https://blog.dearloom.me/posts/feishu-agent-service-non-business-code/)
 3. [Agent Runtime 不只是一段 Loop：复用 Pi，究竟复用了什么？](https://blog.dearloom.me/posts/pi-runtime-beyond-agent-loop/)
+4. [LangChain 的上下文装配链路](https://blog.dearloom.me/posts/langchain-context-assembly/)
 
 ## 本地开发
 
